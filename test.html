@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>放大镜</title>
+    <link rel="icon" href="./favicon.png">
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #canvas {
+            display: block;
+        }
+
+        #app {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #magnifier {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: none;
+        }
+
+        #magnifier2 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>放大镜</h2>
+        <p>拾取19*19的区域</p>
+        <p>放大10倍</p>
+        <button onclick="handleStart(this)">启动放大镜</button>
+        <input type="file" onchange="handleChangeFile(this)">
+    </div>
+    <canvas id="canvas"></canvas>
+    <canvas id="magnifier" width="190" height="190"></canvas>
+    <canvas id="magnifier2" width="190" height="190"></canvas>
+    <script src="./dist/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "magnifier",
+  "version": "1.0.0",
+  "description": "一个普通的放大镜",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oula-oula/magnifier.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oula-oula/magnifier/issues"
+  },
+  "homepage": "https://github.com/oula-oula/magnifier#readme",
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
+}
