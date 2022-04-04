@@ -2,10 +2,10 @@
     "importsNotUsedAsValues": "preserver",
     "compilerOptions": {
         "outDir": "./dist",
-        "target": "ES3",
+        "target": "ESNext",
         "baseUrl": "./",
-        "lib": ["ES2015", "DOM", "ES2017"]
+        "lib": ["ES2015", "DOM", "ES2017"],
     },
     "include": ["./src/**/*"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
 }

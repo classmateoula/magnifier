@@ -5,6 +5,10 @@ interface IState {
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
 
+canvas.onmousemove = function (e) {
+  console.log(e.pageX, e.offsetX)
+}
+
 const magnifier = document.getElementById("magnifier") as HTMLCanvasElement;
 const magCtx = magnifier.getContext("2d")!;
 
@@ -93,5 +97,3 @@ function handleMouseMove(e: MouseEvent): void {
     drawSystemMagnifier(mag2Ctx, canvas, canvasImg, bounds);
   });
 }
-
-

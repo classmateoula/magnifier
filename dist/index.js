@@ -1,22 +1,25 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var magnifier = document.getElementById("magnifier");
-var magCtx = magnifier.getContext("2d");
-var magnifier2 = document.getElementById("magnifier2");
-var mag2Ctx = magnifier2.getContext("2d");
-var app = document.getElementById("app");
-var canvasImg;
-var showMagnifier = false;
-var state = {
-    showMagnifier: false
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.onmousemove = function (e) {
+    console.log(e.pageX, e.offsetX);
+};
+const magnifier = document.getElementById("magnifier");
+const magCtx = magnifier.getContext("2d");
+const magnifier2 = document.getElementById("magnifier2");
+const mag2Ctx = magnifier2.getContext("2d");
+const app = document.getElementById("app");
+let canvasImg;
+let showMagnifier = false;
+const state = {
+    showMagnifier: false,
 };
 Object.defineProperties(state, {
     showMagnifier: {
         configurable: true,
-        get: function () {
+        get() {
             return showMagnifier;
         },
-        set: function (v) {
+        set(v) {
             if (v) {
                 app.style.display = "none";
                 magnifier.style.display = "block";
@@ -28,8 +31,8 @@ Object.defineProperties(state, {
                 magnifier2.style.display = "none";
             }
             showMagnifier = v;
-        }
-    }
+        },
+    },
 });
 window.addEventListener("mousemove", handleMouseMove);
 window.addEventListener("mousedown", handleMouseDown);
@@ -37,16 +40,16 @@ window.addEventListener("load", handleLoad);
 function handleLoad() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    drawImageByUrl(ctx, canvas, "/bg.jpeg", function (img) {
+    drawImageByUrl(ctx, canvas, "/bg.jpeg", (img) => {
         handleStart();
         canvasImg = img;
     });
 }
 function handleChangeFile(e) {
-    var file = e.files[0];
-    var b = new Blob([file]);
-    var url = URL.createObjectURL(b);
-    drawImageByUrl(ctx, canvas, url, function (img) {
+    const file = e.files[0];
+    const b = new Blob([file]);
+    const url = URL.createObjectURL(b);
+    drawImageByUrl(ctx, canvas, url, (img) => {
         handleStart();
         canvasImg = img;
     });
@@ -61,9 +64,9 @@ function handleMouseMove(e) {
     if (!state.showMagnifier) {
         return;
     }
-    var pageX = e.pageX, pageY = e.pageY;
-    window.requestAnimationFrame(function () {
-        var bounds = {
+    const { pageX, pageY } = e;
+    window.requestAnimationFrame(() => {
+        const bounds = {
             x: pageX - 9,
             y: pageY - 9,
             width: 19,
