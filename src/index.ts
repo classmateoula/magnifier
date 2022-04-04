@@ -33,7 +33,7 @@ Object.defineProperties(state, {
         magnifier.style.display = "block";
         magnifier2.style.display = "block";
       } else {
-        app.style.display = "block";
+        app.style.display = "flex";
         magnifier.style.display = "none";
         magnifier2.style.display = "none";
       }
