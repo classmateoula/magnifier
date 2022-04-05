@@ -14,7 +14,7 @@
 <script src="https://magnifier.oulaoula.cn/dist/magnifier.js"></script>
 ```
 
-### `module`
+### `module` [npm](https://www.npmjs.com/package/oulaoula-magnifier)
 
 ```
     npm install magnifier --save

@@ -1,6 +1,6 @@
 {
-  "name": "magnifier",
-  "version": "1.0.2",
+  "name": "oulaoula-magnifier",
+  "version": "1.0.6",
   "description": "一个普通的放大镜",
   "main": "dist/magnifier.js",
   "scripts": {
