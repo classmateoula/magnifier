@@ -1,6 +1,6 @@
 {
-  "name": "oulaoula-magnifier",
-  "version": "1.0.0",
+  "name": "magnifier",
+  "version": "1.0.2",
   "description": "一个普通的放大镜",
   "main": "dist/magnifier.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oula-oula/magnifier.git"
+  },
+  "publishConfig": {
+    "@oula-oula:registry": "https://npm.pkg.github.com/"
   },
   "keywords": [],
   "author": "",
