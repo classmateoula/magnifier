@@ -14,7 +14,7 @@
 <script src="https://magnifier.oulaoula.cn/dist/magnifier.js"></script>
 ```
 
-### `module` [npm](https://www.npmjs.com/package/oulaoula-magnifier)
+### [`module`](https://www.npmjs.com/package/oulaoula-magnifier)
 
 ```
     npm install magnifier --save
@@ -29,12 +29,12 @@
     drawSystemMagnifier(magCtx, canvasSize, canvasImg, bounds);
 ```
 
-## `drawMagnifier`
+## `drawMagnifier` - 绘制放大镜
 - `magCtx` CanvasRenderingContext2D - 放大镜所在画布
 - `bgCtx` CanvasRenderingContext2D - 背景所在画布
 - `bounds` [IBounds](#bounds) - 放大区域
 
-## `drawSystemMagnifier`
+## `drawSystemMagnifier` - 使用系统API绘制放大镜
 - `magCtx` CanvasRenderingContext2D - 放大镜所在画布
 - `size` ISize - 背景尺寸
 - `image` Image - 背景图
