@@ -46,6 +46,29 @@
 - `x` number
 - `y` number
 
+## 像素放大镜原理说明
+
+画布中的图像由像素的矩阵填充而成，我们只需要将画布中每一块像素向周围扩散n倍，就能达到放大画布的效果，如图(其中一个方格代表一个像素点)：  
+<img src="static/1.png" /> 
+=>
+<img src="static/2.png" />
+
+<img src="static/3.png" />
+=>
+<img src="static/4.png" />
+
+### 注意：getImageData获取的像素矩阵排列如下
+``` js
+  const imageData = ctx.getImageData(0, 0, 1, 1);
+  const [red, green, blue, alpha] = imageData.data;
+  console.log(
+    '红色:', red,
+    '绿色:', green,
+    '蓝色:', blue,
+    '透明度:', alpha,
+  );
+```
+
 ## 例子
 
 ```js
