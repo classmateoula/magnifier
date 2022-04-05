@@ -1,8 +1,8 @@
 {
   "name": "oulaoula-magnifier",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "一个普通的放大镜",
-  "main": "dist/magnifier.js",
+  "main": "dist/index.js",
   "scripts": {
     "watch": "tsc --watch"
   },
