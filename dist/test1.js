@@ -1,18 +1,69 @@
-const canvas = document.querySelector("canvas");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const bgUrl = "https://magnifier.oulaoula.cn/bg.jpeg";
-const magnifier = document.createElement("canvas");
-magnifier.style.position = "fixed";
-magnifier.style.right = "0";
-magnifier.style.bottom = "0";
-magnifier.width = 190;
-magnifier.height = 190;
+canvas.onmousemove = handleMouseMove;
+const magnifier = document.getElementById("magnifier");
 const magCtx = magnifier.getContext("2d");
-document.body.appendChild(magnifier);
-drawImageByUrl(ctx, canvas, bgUrl);
-canvas.onmousemove = function (e) {
+const magnifier2 = document.getElementById("magnifier2");
+const mag2Ctx = magnifier2.getContext("2d");
+const app = document.getElementById("app");
+let canvasImg;
+let showMagnifier = false;
+const state = {
+    showMagnifier: false,
+};
+Object.defineProperties(state, {
+    showMagnifier: {
+        configurable: true,
+        get() {
+            return showMagnifier;
+        },
+        set(v) {
+            if (v) {
+                app.style.display = "none";
+                magnifier.style.display = "block";
+                magnifier2.style.display = "block";
+            }
+            else {
+                app.style.display = "flex";
+                magnifier.style.display = "none";
+                magnifier2.style.display = "none";
+            }
+            showMagnifier = v;
+        },
+    },
+});
+window.addEventListener("mousemove", handleMouseMove);
+window.addEventListener("mousedown", handleMouseDown);
+window.addEventListener("load", handleLoad);
+function handleLoad() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawImageByUrl(ctx, canvas, "/bg.jpeg", (img) => {
+        handleStart();
+        canvasImg = img;
+    });
+}
+function handleChangeFile(e) {
+    const file = e.files[0];
+    const b = new Blob([file]);
+    const url = URL.createObjectURL(b);
+    drawImageByUrl(ctx, canvas, url, (img) => {
+        handleStart();
+        canvasImg = img;
+    });
+}
+function handleMouseDown() {
+    state.showMagnifier = false;
+}
+function handleStart() {
+    state.showMagnifier = true;
+}
+function handleMouseMove(e) {
+    if (!state.showMagnifier) {
+        return;
+    }
     const { offsetX, offsetY } = e;
-    window.requestAnimationFrame(function () {
+    window.requestAnimationFrame(() => {
         const bounds = {
             x: offsetX - 9,
             y: offsetY - 9,
@@ -21,5 +72,7 @@ canvas.onmousemove = function (e) {
         };
         // 新版扩散
         drawMagnifier(magCtx, ctx, bounds);
+        // 系统缩放
+        drawSystemMagnifier(mag2Ctx, canvas, canvasImg, bounds);
     });
-};
+}

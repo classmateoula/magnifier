@@ -1,80 +1,74 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-canvas.onmousemove = function (e) {
-    console.log(e.pageX, e.offsetX);
-};
-const magnifier = document.getElementById("magnifier");
-const magCtx = magnifier.getContext("2d");
-const magnifier2 = document.getElementById("magnifier2");
-const mag2Ctx = magnifier2.getContext("2d");
-const app = document.getElementById("app");
-let canvasImg;
-let showMagnifier = false;
-const state = {
-    showMagnifier: false,
-};
-Object.defineProperties(state, {
-    showMagnifier: {
-        configurable: true,
-        get() {
-            return showMagnifier;
-        },
-        set(v) {
-            if (v) {
-                app.style.display = "none";
-                magnifier.style.display = "block";
-                magnifier2.style.display = "block";
+const DEFAULE_MAGNIFIER_SCALE = 10;
+/**
+ * 使用canvas自带api实现放大镜效果
+ * @param ctx 放大镜所在画布
+ * @param size 背景尺寸
+ * @param image 背景图
+ * @param bounds 放大区域
+ * @param scale 缩放倍数
+ */
+export function drawSystemMagnifier(ctx, size, image, bounds, scale = DEFAULE_MAGNIFIER_SCALE) {
+    const { x, y, width, height } = bounds;
+    const bgScale = getScale(size, image);
+    // 开启平滑算法会导致图像模糊
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(image, x / bgScale, y / bgScale, width / bgScale, height / bgScale, 0, 0, width * scale, height * scale);
+}
+/**
+ * 绘制放大镜
+ * @param ctx 放大镜所在画布
+ * @param bgCtx 背景所在画布
+ * @param bounds 放大位置和尺寸
+ * @param scale 缩放倍数
+ */
+export function drawMagnifier(ctx, bgCtx, bounds, scale = DEFAULE_MAGNIFIER_SCALE) {
+    const { x, y, width, height } = bounds;
+    const imgData = bgCtx.getImageData(x, y, width, height);
+    const newImageData = spreadImageData(imgData, scale);
+    ctx.putImageData(newImageData, 0, 0);
+}
+function spreadImageData(imgData, ratio) {
+    const { width, height, data } = imgData;
+    const result = new ImageData(width * ratio, height * ratio);
+    const { width: rw, data: rData } = result;
+    // 把源数据一个像素点填充到目标的10个像素点上，达到把图像放大10倍的目的
+    for (let sourceRowIndex = 0; sourceRowIndex < height; sourceRowIndex++) {
+        for (let sourceColumnIndex = 0; sourceColumnIndex < width; sourceColumnIndex++) {
+            const sourcePixelIndex = (sourceRowIndex * width + sourceColumnIndex) * 4;
+            const [r, g, b, a] = [
+                data[sourcePixelIndex],
+                data[sourcePixelIndex + 1],
+                data[sourcePixelIndex + 2],
+                data[sourcePixelIndex + 3],
+            ];
+            for (let resultRowIndex = 0; resultRowIndex < ratio; resultRowIndex++) {
+                const resultPixelIndex = sourceRowIndex * ratio + resultRowIndex;
+                for (let resultColumnIndex = 0; resultColumnIndex < ratio; resultColumnIndex++) {
+                    const resultDataIndex = (resultPixelIndex * rw +
+                        sourceColumnIndex * ratio +
+                        resultColumnIndex) *
+                        4;
+                    rData[resultDataIndex] = r;
+                    rData[resultDataIndex + 1] = g;
+                    rData[resultDataIndex + 2] = b;
+                    rData[resultDataIndex + 3] = a;
+                }
             }
-            else {
-                app.style.display = "flex";
-                magnifier.style.display = "none";
-                magnifier2.style.display = "none";
-            }
-            showMagnifier = v;
-        },
-    },
-});
-window.addEventListener("mousemove", handleMouseMove);
-window.addEventListener("mousedown", handleMouseDown);
-window.addEventListener("load", handleLoad);
-function handleLoad() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawImageByUrl(ctx, canvas, "/bg.jpeg", (img) => {
-        handleStart();
-        canvasImg = img;
-    });
-}
-function handleChangeFile(e) {
-    const file = e.files[0];
-    const b = new Blob([file]);
-    const url = URL.createObjectURL(b);
-    drawImageByUrl(ctx, canvas, url, (img) => {
-        handleStart();
-        canvasImg = img;
-    });
-}
-function handleMouseDown() {
-    state.showMagnifier = false;
-}
-function handleStart() {
-    state.showMagnifier = true;
-}
-function handleMouseMove(e) {
-    if (!state.showMagnifier) {
-        return;
+        }
     }
-    const { pageX, pageY } = e;
-    window.requestAnimationFrame(() => {
-        const bounds = {
-            x: pageX - 9,
-            y: pageY - 9,
-            width: 19,
-            height: 19
-        };
-        // 新版扩散
-        drawMagnifier(magCtx, ctx, bounds);
-        // 系统缩放
-        drawSystemMagnifier(mag2Ctx, canvas, canvasImg, bounds);
-    });
+    return result;
+}
+/**
+ * 获取缩放倍数 - 自适应 cover
+ * @param prevSize 适应尺寸
+ * @param currSize 被适应尺寸
+ * @returns 缩放值
+ */
+function getScale(prevSize, currSize) {
+    if (prevSize.width > prevSize.height) {
+        return prevSize.width / currSize.width;
+    }
+    else {
+        return prevSize.height / currSize.height;
+    }
 }
